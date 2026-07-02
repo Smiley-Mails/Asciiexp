@@ -1406,36 +1406,44 @@ void AsciiExp::DumpMatrix3(Matrix3* m, int indentLevel)
 {
 	Point3 row;
 	TSTR indent = GetIndent(indentLevel);
-	
-	// Dump the whole Matrix
+
+	// Выравниваем токен по левому краю на 16 символов (%-16s), а числа форматируем по 8 символов
 	row = m->GetRow(0);
-	_ftprintf(pStream, _T("%s%s %s\n"), indent.data(), ID_TM_ROW0, Format(row));
+	_ftprintf(pStream, _T("%s%-16s [%8s %8s %8s ]\n"), indent.data(), ID_TM_ROW0, Format(row.x).data(), Format(row.y).data(), Format(row.z).data());
+
 	row = m->GetRow(1);
-	_ftprintf(pStream, _T("%s%s %s\n"), indent.data(), ID_TM_ROW1, Format(row));
+	_ftprintf(pStream, _T("%s%-16s [%8s %8s %8s ]\n"), indent.data(), ID_TM_ROW1, Format(row.x).data(), Format(row.y).data(), Format(row.z).data());
+
 	row = m->GetRow(2);
-	_ftprintf(pStream, _T("%s%s %s\n"), indent.data(), ID_TM_ROW2, Format(row));
+	_ftprintf(pStream, _T("%s%-16s [%8s %8s %8s ]\n"), indent.data(), ID_TM_ROW2, Format(row.x).data(), Format(row.y).data(), Format(row.z).data());
+
 	row = m->GetRow(3);
-	_ftprintf(pStream, _T("%s%s %s\n"), indent.data(), ID_TM_ROW3, Format(row));
-	
+	_ftprintf(pStream, _T("%s%-16s [%8s %8s %8s ]\n"), indent.data(), ID_TM_ROW3, Format(row.x).data(), Format(row.y).data(), Format(row.z).data());
+
 	// Decompose the matrix and dump the contents
 	AffineParts ap;
 	float rotAngle;
 	Point3 rotAxis;
 	float scaleAxAngle;
 	Point3 scaleAxis;
-	
+
 	decomp_affine(*m, &ap);
 
 	// Quaternions are dumped as angle axis.
 	AngAxisFromQ(ap.q, &rotAngle, rotAxis);
 	AngAxisFromQ(ap.u, &scaleAxAngle, scaleAxis);
 
-	_ftprintf(pStream, _T("%s%s %s\n"), indent.data(), ID_TM_POS, Format(ap.t));
-	_ftprintf(pStream, _T("%s%s %s\n"), indent.data(), ID_TM_ROTAXIS, Format(rotAxis));
-	_ftprintf(pStream, _T("%s%s %s\n"), indent.data(), ID_TM_ROTANGLE, Format(rotAngle));
-	_ftprintf(pStream, _T("%s%s %s\n"), indent.data(), ID_TM_SCALE, Format(ap.k));
-	_ftprintf(pStream, _T("%s%s %s\n"), indent.data(), ID_TM_SCALEAXIS, Format(scaleAxis));
-	_ftprintf(pStream, _T("%s%s %s\n"), indent.data(), ID_TM_SCALEAXISANG, Format(scaleAxAngle));
+	// Применяем такое же выравнивание и квадратные скобки ко всем Point3 токенам в блоке матрицы
+	_ftprintf(pStream, _T("%s%-16s [%8s %8s %8s ]\n"), indent.data(), ID_TM_POS, Format(ap.t.x).data(), Format(ap.t.y).data(), Format(ap.t.z).data());
+	_ftprintf(pStream, _T("%s%-16s [%8s %8s %8s ]\n"), indent.data(), ID_TM_ROTAXIS, Format(rotAxis.x).data(), Format(rotAxis.y).data(), Format(rotAxis.z).data());
+
+	// Одиночные float-значения выравниваем по тому же отступу начала
+	_ftprintf(pStream, _T("%s%-16s %s\n"), indent.data(), ID_TM_ROTANGLE, Format(rotAngle));
+
+	_ftprintf(pStream, _T("%s%-16s [%8s %8s %8s ]\n"), indent.data(), ID_TM_SCALE, Format(ap.k.x).data(), Format(ap.k.y).data(), Format(ap.k.z).data());
+	_ftprintf(pStream, _T("%s%-16s [%8s %8s %8s ]\n"), indent.data(), ID_TM_SCALEAXIS, Format(scaleAxis.x).data(), Format(scaleAxis.y).data(), Format(scaleAxis.z).data());
+
+	_ftprintf(pStream, _T("%s%-16s %s\n"), indent.data(), ID_TM_SCALEAXISANG, Format(scaleAxAngle));
 }
 
 // From the SDK
