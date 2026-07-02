@@ -1,4 +1,4 @@
-﻿//************************************************************************** 
+//************************************************************************** 
 //* Export.cpp	- Ascii File Exporter
 //* 
 //* By Christer Janson
@@ -102,9 +102,7 @@ void AsciiExp::ExportGlobalInfo()
 }
 
 /****************************************************************************
-
   GeomObject output
-  
 ****************************************************************************/
 
 void AsciiExp::ExportGeomObject(INode* node, int indentLevel)
@@ -162,9 +160,7 @@ void AsciiExp::ExportGeomObject(INode* node, int indentLevel)
 }
 
 /****************************************************************************
-
   Shape output
-  
 ****************************************************************************/
 
 void AsciiExp::ExportShapeObject(INode* node, int indentLevel)
@@ -234,9 +230,7 @@ void AsciiExp::DumpPoly(PolyLine* line, Matrix3 tm, int indentLevel)
 }
 
 /****************************************************************************
-
   Light output
-  
 ****************************************************************************/
 
 void AsciiExp::ExportLightObject(INode* node, int indentLevel)
@@ -392,9 +386,7 @@ void AsciiExp::ExportLightSettings(LightState* ls, GenLight* light, TimeValue t,
 
 
 /****************************************************************************
-
   Camera output
-  
 ****************************************************************************/
 
 void AsciiExp::ExportCameraObject(INode* node, int indentLevel)
@@ -495,9 +487,7 @@ void AsciiExp::ExportCameraSettings(CameraState* cs, CameraObject* cam, TimeValu
 
 
 /****************************************************************************
-
   Helper object output
-  
 ****************************************************************************/
 
 void AsciiExp::ExportHelperObject(INode* node, int indentLevel)
@@ -540,9 +530,7 @@ void AsciiExp::ExportHelperObject(INode* node, int indentLevel)
 
 
 /****************************************************************************
-
   Node Header
-  
 ****************************************************************************/
 
 // The Node Header consists of node type (geometry, helper, camera etc.)
@@ -574,9 +562,7 @@ void AsciiExp::ExportNodeHeader(INode* node, const TCHAR* type, int indentLevel)
 
 
 /****************************************************************************
-
   Node Transformation
-  
 ****************************************************************************/
 
 void AsciiExp::ExportNodeTM(INode* node, int indentLevel)
@@ -621,9 +607,7 @@ void AsciiExp::ExportNodeTM(INode* node, int indentLevel)
 }
 
 /****************************************************************************
-
   Animation output
-  
 ****************************************************************************/
 
 // If the object is animated, then we will output the entire mesh definition
@@ -680,9 +664,7 @@ void AsciiExp::ExportAnimMesh(INode* node, int indentLevel)
 
 
 /****************************************************************************
-
   Mesh output
-  
 ****************************************************************************/
 
 void AsciiExp::ExportMesh(INode* node, TimeValue t, int indentLevel)
@@ -794,8 +776,15 @@ void AsciiExp::ExportMesh(INode* node, TimeValue t, int indentLevel)
 			_ftprintf(pStream, _T("%s\t%s {\n"),indent.data(), ID_MESH_TVERTLIST);
 			for (i=0; i<numTVx; i++) {
 				UVVert tv = mesh->tVerts[i];
-//				_ftprintf(pStream, _T("%s\t\t%s %d\t%s\n"),indent.data(), ID_MESH_TVERT, i, Format(tv));
-				_ftprintf(pStream, _T("%s\t\t%s %3d: [ %s]\n"), indent.data(), ID_MESH_TVERT, i, Format(tv));
+				/*_ftprintf(pStream, _T("%s\t\t%s %d\t%s\n"),indent.data(), ID_MESH_TVERT, i, Format(tv));*/
+				/*_ftprintf(pStream, _T("%s\t\t%s %3d: [ %s]\n"), indent.data(), ID_MESH_TVERT, i, Format(tv));*/
+				_ftprintf(pStream, _T("%s\t\t%s %3d: [%8s %8s %8s ]\n"),
+					indent.data(),
+					ID_MESH_TVERT,
+					i,
+					Format(tv.x).data(),
+					Format(tv.y).data(),
+					Format(tv.z).data());
 			}
 			_ftprintf(pStream, _T("%s\t}\n"),indent.data());
 			
